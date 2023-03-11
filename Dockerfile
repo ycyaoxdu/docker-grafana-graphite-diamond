@@ -18,11 +18,16 @@ RUN     pip install Django==1.5
 RUN     pip install pytz
 RUN     npm install ini chokidar
 
-# Install diamond
-RUN        pip install diamond==4.0.195
 
 # Checkout the stable branches of Graphite, Carbon and Whisper and install from there
 RUN     mkdir /src
+
+# Install diamond
+RUN     git clone -b stable  https://github.com/ycyaoxdu/Diamond.git                      &&\
+        cd /src/Diamond                                                                   &&\ 
+        make deb                                                                          &&\
+        make install 
+
 RUN     git clone https://github.com/graphite-project/whisper.git /src/whisper            &&\
         cd /src/whisper                                                                   &&\
         git checkout 0.9.x                                                                &&\
@@ -90,6 +95,8 @@ ADD     ./supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Config diamond
 COPY     ./diamond/diamond.conf /etc/diamond/
+RUN      mkdir -p /etc/diamond/collectors 
+COPY     ./diamond/collectors/DpdkLogCollectors /etc/diamond/collectors
 COPY     ./diamond/diamond-start /tmp/
 RUN      chmod 0777 /tmp/diamond-start
 RUN      dos2unix /tmp/diamond-start
