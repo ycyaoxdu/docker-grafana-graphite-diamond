@@ -96,7 +96,7 @@ ADD     ./supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Config diamond
 COPY     ./diamond/diamond.conf /etc/diamond/
 RUN      mkdir -p /etc/diamond/collectors 
-COPY     ./diamond/collectors/DpdkLogCollectors /etc/diamond/collectors
+COPY     ./diamond/collectors/DpdkLogCollector.conf /etc/diamond/collectors/
 COPY     ./diamond/diamond-start /tmp/
 RUN      chmod 0777 /tmp/diamond-start
 RUN      dos2unix /tmp/diamond-start
